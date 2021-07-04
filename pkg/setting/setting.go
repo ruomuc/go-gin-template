@@ -1,0 +1,60 @@
+package setting
+
+import (
+	"log"
+
+	"gopkg.in/ini.v1"
+)
+
+type App struct {
+	PageSize  int
+	JwtSecret string
+}
+
+type Server struct {
+	RunMode string
+
+	HttpPort     int
+	ReadTimeout  int
+	WriteTimeout int
+}
+
+type Database struct {
+	Type        string
+	User        string
+	Password    string
+	Host        string
+	Name        string
+	TablePrefix string
+}
+
+var (
+	AppSetting      = &App{}
+	ServerSetting   = &Server{}
+	DatabaseSetting = &Database{}
+)
+
+func SetUp() {
+	cfg, err := ini.Load("conf/app.ini")
+	if err != nil {
+		log.Fatalf("Fail to load 'conf/app.ini': %v", err)
+	}
+
+	// 通用配置
+	err = cfg.Section("app").MapTo(AppSetting)
+	if err != nil {
+		log.Fatalf("cfg.Mapto AppSetting err: %v", err)
+	}
+
+	// 服务配置
+	err = cfg.Section("server").MapTo(ServerSetting)
+	if err != nil {
+		log.Fatalf("cfg.Mapto ServerSetting err: %v", err)
+	}
+
+	// 数据库配置
+	err = cfg.Section("database").MapTo(DatabaseSetting)
+	if err != nil {
+		log.Fatalf("cfg.Mapto DatabaseSetting err: %v", err)
+	}
+}
