@@ -2,6 +2,7 @@ package setting
 
 import (
 	"log"
+	"time"
 
 	"gopkg.in/ini.v1"
 )
@@ -15,8 +16,8 @@ type Server struct {
 	RunMode string
 
 	HttpPort     int
-	ReadTimeout  int
-	WriteTimeout int
+	ReadTimeout  time.Duration
+	WriteTimeout time.Duration
 }
 
 type Database struct {
@@ -51,6 +52,8 @@ func SetUp() {
 	if err != nil {
 		log.Fatalf("cfg.Mapto ServerSetting err: %v", err)
 	}
+	ServerSetting.ReadTimeout = ServerSetting.ReadTimeout * time.Second
+	ServerSetting.WriteTimeout = ServerSetting.WriteTimeout * time.Second
 
 	// 数据库配置
 	err = cfg.Section("database").MapTo(DatabaseSetting)
