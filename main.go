@@ -7,6 +7,11 @@ import (
 	"ticket-crawler/routers"
 )
 
+// @title ticket-crawler API
+// @version  1.0
+// @contact.name ruomu
+// @contact.url blog.seeln.com
+// @contact.email 252615299@qq.com
 func main() {
 	setting.SetUp()
 	router := routers.InitRouter()
