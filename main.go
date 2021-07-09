@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"ticket-crawler/pkg/setting"
+	"ticket-crawler/pkg/validate"
 	"ticket-crawler/routers"
 )
 
@@ -14,6 +15,8 @@ import (
 // @contact.email 252615299@qq.com
 func main() {
 	setting.SetUp()
+	validate.InitTrans()
+
 	router := routers.InitRouter()
 	server := &http.Server{
 		Addr:           fmt.Sprintf(":%d", setting.ServerSetting.HttpPort),

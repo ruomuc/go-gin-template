@@ -2,12 +2,13 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"net/http"
 	_ "ticket-crawler/docs"
 	"ticket-crawler/pkg/app"
 	"ticket-crawler/pkg/e"
-	"ticket-crawler/pkg/util"
-	user_service "ticket-crawler/service/user-service"
+	"ticket-crawler/pkg/validate"
+	userService "ticket-crawler/service/user-service"
 )
 
 type LoginResponse struct {
@@ -26,9 +27,13 @@ func Login(c *gin.Context) {
 
 }
 
-type user struct {
-	username string `validate:"max=20"`
-	password string `validate:"max=64"`
+type User struct {
+	Username string `validate:"required,min=1,max=20"`
+	Password string `validate:"required,min=8,max=64"`
+}
+
+func UsernameDuplicate(v *validator.Validate) bool {
+	return true
 }
 
 // @Summary 注册
@@ -44,24 +49,22 @@ func SignIn(c *gin.Context) {
 	appG := app.Gin{C: c}
 
 	var err error
-	//valid := validator.New()
+
 	username := c.Query("username")
 	password := c.Query("password")
 
 	// 校验参数
-	//u := user{username: username, password: password}
-
-	// 加密密码
-	password, err = util.HashPassword(password)
+	u := &User{Username: username, Password: password}
+	err = validate.Validator.Struct(u)
 	if err != nil {
-		appG.Response(http.StatusInternalServerError, e.ERROR, nil)
+		newErr := validate.Translate(err.(validator.ValidationErrors))
+		app.MakeErrors(newErr)
+		appG.Response(http.StatusBadRequest, e.InvalidParam, newErr[0])
+		return
 	}
 
-	userService := user_service.User{Username: username, Password: password}
-	// 判断用户名是否存在
-	//exist, err = userService.ExistUserByUsername()
-
-	err = userService.AddUser()
+	us := userService.User{Username: username, Password: password}
+	err = us.AddUser()
 	if err != nil {
 		appG.Response(http.StatusInternalServerError, e.ERROR, nil)
 	}

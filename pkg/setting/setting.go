@@ -8,8 +8,9 @@ import (
 )
 
 type App struct {
-	PageSize  int
-	JwtSecret string
+	PageSize          int
+	JwtSecret         string
+	ValidatorLanguage string
 }
 
 type Server struct {
