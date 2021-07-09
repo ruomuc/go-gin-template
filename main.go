@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"ticket-crawler/pkg/setting"
 	"ticket-crawler/pkg/validate"
@@ -14,16 +15,20 @@ import (
 // @contact.url blog.seeln.com
 // @contact.email 252615299@qq.com
 func main() {
-	setting.SetUp()
-	validate.InitTrans()
+	gin.SetMode(setting.ServerSetting.RunMode)
 
-	router := routers.InitRouter()
+	routers := router.InitRouter()
 	server := &http.Server{
 		Addr:           fmt.Sprintf(":%d", setting.ServerSetting.HttpPort),
-		Handler:        router,
+		Handler:        routers,
 		ReadTimeout:    setting.ServerSetting.ReadTimeout,
 		WriteTimeout:   setting.ServerSetting.WriteTimeout,
 		MaxHeaderBytes: 1 << 20,
 	}
 	_ = server.ListenAndServe()
+}
+
+func init() {
+	setting.SetUp()
+	validate.InitTrans()
 }

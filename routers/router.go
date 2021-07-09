@@ -1,4 +1,4 @@
-package routers
+package router
 
 import (
 	"github.com/gin-gonic/gin"
@@ -12,7 +12,6 @@ func InitRouter() *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
-
 	// 通用路由
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.POST("/signin", api.SignIn)

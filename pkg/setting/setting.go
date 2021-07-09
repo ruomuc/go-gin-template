@@ -2,6 +2,7 @@ package setting
 
 import (
 	"log"
+	"os"
 	"time"
 
 	"gopkg.in/ini.v1"
@@ -37,9 +38,19 @@ var (
 )
 
 func SetUp() {
-	cfg, err := ini.Load("conf/app.ini")
+	var cfg *ini.File
+	var err error
+
+	profile := os.Getenv("profile")
+	switch profile {
+	case "prod":
+		cfg, err = ini.Load("conf/prod.ini")
+	default:
+		cfg, err = ini.Load("conf/dev.ini")
+	}
+
 	if err != nil {
-		log.Fatalf("Fail to load 'conf/app.ini': %v", err)
+		log.Fatalf("Fail to load 'conf/dev.ini': %v", err)
 	}
 
 	// 通用配置
