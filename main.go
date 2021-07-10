@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"ticket-crawler/pkg/logging"
 	"ticket-crawler/pkg/setting"
 	"ticket-crawler/pkg/validate"
 	"ticket-crawler/router"
@@ -30,5 +31,6 @@ func main() {
 
 func init() {
 	setting.SetUp()
+	logging.Setup()
 	validate.InitTrans()
 }

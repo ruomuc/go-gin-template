@@ -12,6 +12,11 @@ type App struct {
 	PageSize          int
 	JwtSecret         string
 	ValidatorLanguage string
+	RuntimeRootPath   string
+	LogSavePath       string
+	LogSaveName       string
+	TimeFormat        string
+	LogFileExt        string
 }
 
 type Server struct {
