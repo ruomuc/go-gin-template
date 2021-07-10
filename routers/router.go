@@ -1,11 +1,12 @@
 package router
 
 import (
+	"net/http"
+	"ticket-crawler/routers/api"
+
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"net/http"
-	"ticket-crawler/routers/api"
 )
 
 func InitRouter() *gin.Engine {
@@ -14,7 +15,7 @@ func InitRouter() *gin.Engine {
 	r.Use(gin.Recovery())
 	// 通用路由
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	r.POST("/signin", api.SignIn)
+	r.POST("/signup", api.SignUp)
 	r.POST("/login", api.Login)
 
 	// 路由组
