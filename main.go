@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"ticket-crawler/pkg/setting"
 	"ticket-crawler/pkg/validate"
-	"ticket-crawler/routers"
+	"ticket-crawler/router"
 )
 
 // @title ticket-crawler API

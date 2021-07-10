@@ -50,20 +50,37 @@ func InitTrans() {
 		}
 		return name
 	})
-}
-
-func translate(trans ut.Translator, fe validator.FieldError) string {
-	msg, err := trans.T(fe.Tag(), fe.Field())
+	// 注册自定义翻译方法
+	err := V.RegisterTranslation("SignUpParamUsernameValidate", trans, registerTranslator("SignUpParamUsernameValidate", "{0}不能重复"), translate)
 	if err != nil {
-		panic(fe.(error).Error())
+		panic(err)
 	}
-	return msg
 }
 
+// Translate 翻译错误信息
 func Translate(errs validator.ValidationErrors) []string {
 	var res []string
 	for _, err := range errs {
 		res = append(res, err.Translate(trans))
 	}
 	return res
+}
+
+// registerTranslator 为自定义字段添加翻译功能
+func registerTranslator(tag string, msg string) validator.RegisterTranslationsFunc {
+	return func(trans ut.Translator) error {
+		if err := trans.Add(tag, msg, false); err != nil {
+			return err
+		}
+		return nil
+	}
+}
+
+// translate 自定义字段的翻译方法
+func translate(trans ut.Translator, fe validator.FieldError) string {
+	msg, err := trans.T(fe.Tag(), fe.Field())
+	if err != nil {
+		panic(fe.(error).Error())
+	}
+	return msg
 }

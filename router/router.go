@@ -2,7 +2,7 @@ package router
 
 import (
 	"net/http"
-	"ticket-crawler/routers/api"
+	"ticket-crawler/router/api"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"

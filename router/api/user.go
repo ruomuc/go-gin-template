@@ -47,13 +47,16 @@ func SignUp(c *gin.Context) {
 	rePassword := c.Query("rePassword")
 
 	// 校验参数
-	validate.V.RegisterStructValidation(validate.SignUpParamPasswordValidation, validate.SignUpParam{})
+	// 这个方法不是 线程安全的，需要在每个校验前进行注册
+	if err = validate.V.RegisterValidation("SignUpParamUsernameValidate", validate.SignUpParamUsernameValidation); err != nil {
+		appG.Response(http.StatusInternalServerError, e.ERROR, err.Error())
+		return
+	}
 	signUpParam := &validate.SignUpParam{Username: username, Password: password, RePassword: rePassword}
 	err = validate.V.Struct(signUpParam)
 	if err != nil {
-		newErr := validate.Translate(err.(validator.ValidationErrors))
-		app.MakeErrors(newErr)
-		appG.Response(http.StatusBadRequest, e.InvalidParam, newErr[0])
+		msg := app.MakeErrors(err.(validator.ValidationErrors))
+		appG.Response(http.StatusBadRequest, e.InvalidParam, msg)
 		return
 	}
 
