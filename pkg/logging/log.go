@@ -45,7 +45,7 @@ func Setup() {
 	}
 	// gin的框架的路由日志
 	//gin.DisableConsoleColor()
-	gin.DefaultWriter = io.MultiWriter(F)
+	gin.DefaultWriter = io.MultiWriter(F, os.Stdout)
 	// 打印的日志
 	logger = log.New(F, DefaultPrefix, log.LstdFlags)
 }
@@ -82,9 +82,9 @@ func Fatal(v ...interface{}) {
 
 // setPrefix set the prefix of the log output
 func setPrefix(level Level) {
-	_, file, line, ok := runtime.Caller(DefaultCallerDepth)
+	_, f, line, ok := runtime.Caller(DefaultCallerDepth)
 	if ok {
-		logPrefix = fmt.Sprintf("[%s][%s:%d]", levelFlags[level], filepath.Base(file), line)
+		logPrefix = fmt.Sprintf("[%s][%s:%d]", levelFlags[level], filepath.Base(f), line)
 	} else {
 		logPrefix = fmt.Sprintf("[%s]", levelFlags[level])
 	}

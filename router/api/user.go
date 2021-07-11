@@ -61,9 +61,10 @@ func SignUp(c *gin.Context) {
 	}
 
 	us := userService.User{Username: username, Password: password}
-	err = us.AddUser()
+	err = us.Add()
 	if err != nil {
 		appG.Response(http.StatusInternalServerError, e.ERROR, nil)
+		return
 	}
 	appG.Response(http.StatusOK, e.SUCCESS, true)
 }

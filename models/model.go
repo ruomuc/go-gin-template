@@ -13,16 +13,16 @@ var db *gorm.DB
 
 type Model struct {
 	ID        int       `json:"id" gorm:"primary_key"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 	Creator   int       `json:"creator"`
 	Reviser   int       `json:"reviser"`
-	IsDeleted int       `json:"isDeleted"`
+	IsDeleted int       `json:"is_deleted"`
 }
 
 func SetUp() {
 	var err error
-	_, err = gorm.Open(setting.DatabaseSetting.Type, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=true&loc=Local",
+	db, err = gorm.Open(setting.DatabaseSetting.Type, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=true&loc=Local",
 		setting.DatabaseSetting.User,
 		setting.DatabaseSetting.Password,
 		setting.DatabaseSetting.Host,
@@ -32,6 +32,9 @@ func SetUp() {
 		log.Fatalf("models setup err: %v", err)
 	}
 
-	db.DB().SetMaxOpenConns(10)
-	db.DB().SetMaxIdleConns(100)
+	//全局禁用表名复数形式
+	db.SingularTable(true)
+
+	db.DB().SetMaxIdleConns(10)
+	db.DB().SetMaxOpenConns(100)
 }
