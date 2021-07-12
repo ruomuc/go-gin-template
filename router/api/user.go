@@ -5,6 +5,8 @@ import (
 	_ "ticket-crawler/docs"
 	"ticket-crawler/pkg/app"
 	"ticket-crawler/pkg/e"
+	"ticket-crawler/pkg/logging"
+	"ticket-crawler/pkg/util"
 	"ticket-crawler/pkg/validate"
 	userService "ticket-crawler/service/user-service"
 
@@ -25,7 +27,33 @@ type LoginResponse struct {
 // @Success 200 {object} app.Response{data=api.LoginResponse} "desc"
 // @Router /login [post]
 func Login(c *gin.Context) {
+	appG := app.Gin{C: c}
 
+	username := c.Query("username")
+	password := c.Query("password")
+	// 参数校验
+	loginParam := &validate.LoginParam{Username: username, Password: password}
+	err := validate.V.Struct(loginParam)
+	if err != nil {
+		errMsg := app.MarkErrors(err.(validator.ValidationErrors))
+		appG.Response(http.StatusInternalServerError, e.ERROR, errMsg)
+		return
+	}
+
+	// 获取用户信息（密码）
+	us := userService.User{Username: username}
+	user, err := us.GetUserByUsername()
+	if err != nil {
+		logging.Error(err.Error())
+		appG.Response(http.StatusInternalServerError, e.ERROR, err.Error())
+		return
+	}
+	// check：用户输入的密码和数据库中的密码
+	pass := util.CheckPasswordHash(password, user.Password)
+	if !pass {
+		appG.Response(http.StatusUnauthorized, e.ErrorPassword, nil)
+	}
+	// 生成jwt token
 }
 
 // @Summary 注册
@@ -55,7 +83,7 @@ func SignUp(c *gin.Context) {
 	signUpParam := &validate.SignUpParam{Username: username, Password: password, RePassword: rePassword}
 	err = validate.V.Struct(signUpParam)
 	if err != nil {
-		msg := app.MakeErrors(err.(validator.ValidationErrors))
+		msg := app.MarkErrors(err.(validator.ValidationErrors))
 		appG.Response(http.StatusBadRequest, e.InvalidParam, msg)
 		return
 	}
@@ -63,6 +91,7 @@ func SignUp(c *gin.Context) {
 	us := userService.User{Username: username, Password: password}
 	err = us.Add()
 	if err != nil {
+		logging.Error(err.Error())
 		appG.Response(http.StatusInternalServerError, e.ERROR, nil)
 		return
 	}

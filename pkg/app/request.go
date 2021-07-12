@@ -6,7 +6,7 @@ import (
 	"ticket-crawler/pkg/validate"
 )
 
-func MakeErrors(errs validator.ValidationErrors) string {
+func MarkErrors(errs validator.ValidationErrors) string {
 	newErr := validate.Translate(errs)
 	for _, ne := range newErr {
 		logging.Info(ne)

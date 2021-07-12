@@ -28,3 +28,11 @@ func (u *User) Add() error {
 	}
 	return nil
 }
+
+func (u *User) GetUserByUsername() (*models.User, error) {
+	user, err := models.GetUserByUsername(u.Username)
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
+}

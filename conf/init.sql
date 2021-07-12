@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `users`
+CREATE TABLE IF NOT EXISTS `user`
 (
     `id`         bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
     `username`   varchar(20)         NOT NULL DEFAULT '' COMMENT '用户名',
