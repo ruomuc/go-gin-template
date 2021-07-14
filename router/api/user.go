@@ -40,7 +40,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	// 获取用户信息（密码）
+	// 获取用户信息
 	us := userService.User{Username: username}
 	user, err := us.GetUserByUsername()
 	if err != nil {
@@ -52,8 +52,16 @@ func Login(c *gin.Context) {
 	pass := util.CheckPasswordHash(password, user.Password)
 	if !pass {
 		appG.Response(http.StatusUnauthorized, e.ErrorPassword, nil)
+		return
 	}
 	// 生成jwt token
+	token, err := util.GenerateToken(user.ID, user.Username, user.Phone)
+	if err != nil {
+		logging.Error(err.Error())
+		appG.Response(http.StatusInternalServerError, e.TokenGenerateFailed, nil)
+		return
+	}
+	appG.Response(http.StatusOK, e.SUCCESS, LoginResponse{Token: token})
 }
 
 // @Summary 注册

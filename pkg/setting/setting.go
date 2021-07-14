@@ -17,6 +17,7 @@ type App struct {
 	LogSaveName       string
 	TimeFormat        string
 	LogFileExt        string
+	JwtExpireTime     int
 }
 
 type Server struct {
