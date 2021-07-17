@@ -10,12 +10,12 @@ import (
 
 func JWT() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var code int
-		token := c.GetHeader("authentication")
+		code := e.SUCCESS
+		token := c.GetHeader("authorization")
 		if token == "" {
-			code = e.AuthenticationNotFound
+			code = e.AuthorizationnNotFound
 		} else {
-			err := util.ParseToken(token)
+			customData, err := util.ParseToken(token)
 			if err != nil {
 				switch err.(*jwt.ValidationError).Errors {
 				case jwt.ValidationErrorExpired:
@@ -23,6 +23,9 @@ func JWT() gin.HandlerFunc {
 				default:
 					code = e.AuthTokenFailed
 				}
+			} else {
+				// 把我们需要的信息，放入上下文
+				c.Set("extras", customData)
 			}
 		}
 

@@ -7,7 +7,7 @@ const (
 
 	ErrorPassword = 20001
 
-	AuthenticationNotFound = 30001
+	AuthorizationnNotFound = 30001
 	AuthTokenExpired       = 30002
 	AuthTokenFailed        = 30003
 	TokenGenerateFailed    = 30004

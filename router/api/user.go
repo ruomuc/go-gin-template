@@ -22,38 +22,37 @@ type LoginResponse struct {
 // @description 用户登录接口
 // @tags user
 // @Produce json
-// @Param userName query string true "用户名"
-// @Param passWord query string true "密码"
+// @Param userName body string true "用户名"
+// @Param passWord body string true "密码"
 // @Success 200 {object} app.Response{data=api.LoginResponse} "desc"
 // @Router /login [post]
 func Login(c *gin.Context) {
 	appG := app.Gin{C: c}
 
-	username := c.Query("username")
-	password := c.Query("password")
-	// 参数校验
-	loginParam := &validate.LoginParam{Username: username, Password: password}
-	err := validate.V.Struct(loginParam)
-	if err != nil {
-		errMsg := app.MarkErrors(err.(validator.ValidationErrors))
-		appG.Response(http.StatusInternalServerError, e.ERROR, errMsg)
+	// 绑定form，并校验参数
+	var form validate.LoginParam
+	httpCode, code, errMsg := app.BindAndValid(c, &form)
+	if httpCode != http.StatusOK {
+		appG.Response(httpCode, code, errMsg)
 		return
 	}
 
 	// 获取用户信息
-	us := userService.User{Username: username}
+	us := userService.User{Username: form.Username}
 	user, err := us.GetUserByUsername()
 	if err != nil {
 		logging.Error(err.Error())
 		appG.Response(http.StatusInternalServerError, e.ERROR, err.Error())
 		return
 	}
+
 	// check：用户输入的密码和数据库中的密码
-	pass := util.CheckPasswordHash(password, user.Password)
+	pass := util.CheckPasswordHash(form.Password, user.Password)
 	if !pass {
 		appG.Response(http.StatusUnauthorized, e.ErrorPassword, nil)
 		return
 	}
+
 	// 生成jwt token
 	token, err := util.GenerateToken(user.ID, user.Username, user.Phone)
 	if err != nil {
@@ -70,6 +69,7 @@ func Login(c *gin.Context) {
 // @Produce json
 // @Param username query string true "用户名"
 // @Param passWord query string true "密码"
+// @Param rePassword query string true "确认密码"
 // @Success 200 {object} app.Response{data=boolean} "desc"
 // @Failure 500 {object} app.Response
 // @Router /signup [post]

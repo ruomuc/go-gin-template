@@ -40,18 +40,22 @@ var doc = `{
                 "summary": "登录",
                 "parameters": [
                     {
-                        "type": "string",
                         "description": "用户名",
                         "name": "userName",
-                        "in": "query",
-                        "required": true
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     {
-                        "type": "string",
                         "description": "密码",
                         "name": "passWord",
-                        "in": "query",
-                        "required": true
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
@@ -76,7 +80,7 @@ var doc = `{
                 }
             }
         },
-        "/signin": {
+        "/signup": {
             "post": {
                 "description": "用户注册接口",
                 "produces": [
@@ -90,7 +94,7 @@ var doc = `{
                     {
                         "type": "string",
                         "description": "用户名",
-                        "name": "userName",
+                        "name": "username",
                         "in": "query",
                         "required": true
                     },
@@ -98,6 +102,13 @@ var doc = `{
                         "type": "string",
                         "description": "密码",
                         "name": "passWord",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "确认密码",
+                        "name": "rePassword",
                         "in": "query",
                         "required": true
                     }
@@ -119,6 +130,12 @@ var doc = `{
                                     }
                                 }
                             ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
                         }
                     }
                 }
@@ -163,8 +180,8 @@ type swaggerInfo struct {
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
 	Version:     "1.0",
-	Host:        "",
-	BasePath:    "",
+	Host:        "localhost:8080",
+	BasePath:    "/api/v1",
 	Schemes:     []string{},
 	Title:       "ticket-crawler API",
 	Description: "",

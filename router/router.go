@@ -1,9 +1,9 @@
 package router
 
 import (
-	"net/http"
 	"ticket-crawler/middleware"
 	"ticket-crawler/router/api"
+	v1 "ticket-crawler/router/api/v1"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -23,13 +23,11 @@ func InitRouter() *gin.Engine {
 	r.POST("/login", api.Login)
 
 	// 路由组
-	v1 := r.Group("/api/v1")
+	apiv1 := r.Group("/api/v1")
 	// 鉴权中间件加载到路由组上，因为通用路由不用鉴权。。
-	v1.Use(middleware.JWT())
+	apiv1.Use(middleware.JWT())
 	{
-		v1.GET("/", func(context *gin.Context) {
-			context.JSON(http.StatusOK, "helloWorld")
-		})
+		apiv1.GET("/test-token", v1.TestToken)
 	}
 	return r
 }
