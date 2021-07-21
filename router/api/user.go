@@ -11,7 +11,6 @@ import (
 	userService "ticket-crawler/service/user-service"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
 )
 
 type LoginResponse struct {
@@ -24,7 +23,9 @@ type LoginResponse struct {
 // @Produce json
 // @Param userName body string true "用户名"
 // @Param passWord body string true "密码"
-// @Success 200 {object} app.Response{data=api.LoginResponse} "desc"
+// @Success 200 {object} app.Response{data=api.LoginResponse} "Success Response"
+// @Failure 400 {object} app.Response
+// @Failure 500 {object} app.Response
 // @Router /login [post]
 func Login(c *gin.Context) {
 	appG := app.Gin{C: c}
@@ -67,20 +68,18 @@ func Login(c *gin.Context) {
 // @description 用户注册接口
 // @tags user
 // @Produce json
-// @Param username query string true "用户名"
-// @Param passWord query string true "密码"
-// @Param rePassword query string true "确认密码"
-// @Success 200 {object} app.Response{data=boolean} "desc"
+// @Param username body string true "用户名"
+// @Param passWord body string true "密码"
+// @Param rePassword body string true "确认密码"
+// @Success 200 {object} app.Response{data=boolean} "Success Response"
+// @Failure 400 {object} app.Response
 // @Failure 500 {object} app.Response
 // @Router /signup [post]
 func SignUp(c *gin.Context) {
 	appG := app.Gin{C: c}
 
 	var err error
-
-	username := c.Query("username")
-	password := c.Query("password")
-	rePassword := c.Query("rePassword")
+	var form validate.SignUpParam
 
 	// 校验参数
 	// 这个方法不是 线程安全的，需要在每个校验前进行注册
@@ -88,15 +87,13 @@ func SignUp(c *gin.Context) {
 		appG.Response(http.StatusInternalServerError, e.ERROR, err.Error())
 		return
 	}
-	signUpParam := &validate.SignUpParam{Username: username, Password: password, RePassword: rePassword}
-	err = validate.V.Struct(signUpParam)
-	if err != nil {
-		msg := app.MarkErrors(err.(validator.ValidationErrors))
-		appG.Response(http.StatusBadRequest, e.InvalidParam, msg)
+	httpCode, code, errMsg := app.BindAndValid(c, &form)
+	if httpCode != http.StatusOK {
+		appG.Response(httpCode, code, errMsg)
 		return
 	}
 
-	us := userService.User{Username: username, Password: password}
+	us := userService.User{Username: form.Username, Password: form.Password}
 	err = us.Add()
 	if err != nil {
 		logging.Error(err.Error())

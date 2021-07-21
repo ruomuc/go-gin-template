@@ -43,7 +43,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: desc
+          description: Success Response
           schema:
             allOf:
             - $ref: '#/definitions/app.Response'
@@ -51,6 +51,14 @@ paths:
                 data:
                   $ref: '#/definitions/api.LoginResponse'
               type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
       summary: 登录
       tags:
       - user
@@ -59,25 +67,28 @@ paths:
       description: 用户注册接口
       parameters:
       - description: 用户名
-        in: query
+        in: body
         name: username
         required: true
-        type: string
+        schema:
+          type: string
       - description: 密码
-        in: query
+        in: body
         name: passWord
         required: true
-        type: string
+        schema:
+          type: string
       - description: 确认密码
-        in: query
+        in: body
         name: rePassword
         required: true
-        type: string
+        schema:
+          type: string
       produces:
       - application/json
       responses:
         "200":
-          description: desc
+          description: Success Response
           schema:
             allOf:
             - $ref: '#/definitions/app.Response'
@@ -85,6 +96,10 @@ paths:
                 data:
                   type: boolean
               type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.Response'
         "500":
           description: Internal Server Error
           schema:
@@ -92,4 +107,55 @@ paths:
       summary: 注册
       tags:
       - user
+  /ticket:
+    post:
+      description: 通过这个接口，去第三方获取机票价格
+      parameters:
+      - description: 出发地
+        in: body
+        name: fromCity
+        required: true
+        schema:
+          type: string
+      - description: 目的地
+        in: body
+        name: toCity
+        required: true
+        schema:
+          type: string
+      - description: 开始日期
+        in: body
+        name: startDate
+        required: true
+        schema:
+          type: string
+      - description: 截止日期
+        in: body
+        name: endDate
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success Response
+          schema:
+            allOf:
+            - $ref: '#/definitions/app.Response'
+            - properties:
+                data:
+                  type: boolean
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 获取机票价格源数据
+      tags:
+      - ticket
 swagger: "2.0"

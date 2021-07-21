@@ -2,11 +2,12 @@ package v1
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"ticket-crawler/pkg/app"
 	"ticket-crawler/pkg/e"
 	"ticket-crawler/pkg/logging"
+
+	"github.com/gin-gonic/gin"
 )
 
 // TestToken test Authorization param in header

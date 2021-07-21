@@ -60,7 +60,7 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "desc",
+                        "description": "Success Response",
                         "schema": {
                             "allOf": [
                                 {
@@ -75,6 +75,18 @@ var doc = `{
                                     }
                                 }
                             ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
                         }
                     }
                 }
@@ -92,30 +104,36 @@ var doc = `{
                 "summary": "注册",
                 "parameters": [
                     {
-                        "type": "string",
                         "description": "用户名",
                         "name": "username",
-                        "in": "query",
-                        "required": true
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     {
-                        "type": "string",
                         "description": "密码",
                         "name": "passWord",
-                        "in": "query",
-                        "required": true
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     {
-                        "type": "string",
                         "description": "确认密码",
                         "name": "rePassword",
-                        "in": "query",
-                        "required": true
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "desc",
+                        "description": "Success Response",
                         "schema": {
                             "allOf": [
                                 {
@@ -130,6 +148,94 @@ var doc = `{
                                     }
                                 }
                             ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ticket": {
+            "post": {
+                "description": "通过这个接口，去第三方获取机票价格",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ticket"
+                ],
+                "summary": "获取机票价格源数据",
+                "parameters": [
+                    {
+                        "description": "出发地",
+                        "name": "fromCity",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "目的地",
+                        "name": "toCity",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "开始日期",
+                        "name": "startDate",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "截止日期",
+                        "name": "endDate",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success Response",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/app.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
                         }
                     },
                     "500": {
