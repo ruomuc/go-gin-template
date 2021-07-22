@@ -28,7 +28,6 @@ func InitRouter() *gin.Engine {
 	apiv1.Use(middleware.JWT())
 	{
 		apiv1.GET("/test-token", v1.TestToken)
-		apiv1.POST("/ticket/_climb", v1.ClimbTicketInfo)
 	}
 	return r
 }
