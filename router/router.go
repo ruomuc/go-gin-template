@@ -14,8 +14,8 @@ func InitRouter() *gin.Engine {
 	r := gin.New()
 
 	// 加载中间件
-	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
+	r.Use(middleware.Logger())
 
 	// 通用路由
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

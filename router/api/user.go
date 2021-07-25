@@ -42,7 +42,7 @@ func Login(c *gin.Context) {
 	us := userService.User{Username: form.Username}
 	user, err := us.GetUserByUsername()
 	if err != nil {
-		logging.Error(err.Error())
+		logging.Logger.Errorf("%+v", err)
 		appG.Response(http.StatusInternalServerError, e.ERROR, err.Error())
 		return
 	}
@@ -57,7 +57,7 @@ func Login(c *gin.Context) {
 	// 生成jwt token
 	token, err := util.GenerateToken(user.ID, user.Username, user.Phone)
 	if err != nil {
-		logging.Error(err.Error())
+		logging.Logger.Errorf("%+v", err)
 		appG.Response(http.StatusInternalServerError, e.TokenGenerateFailed, nil)
 		return
 	}
@@ -96,7 +96,7 @@ func SignUp(c *gin.Context) {
 	us := userService.User{Username: form.Username, Password: form.Password}
 	err = us.Add()
 	if err != nil {
-		logging.Error(err.Error())
+		logging.Logger.Errorf("%+v", err)
 		appG.Response(http.StatusInternalServerError, e.ERROR, nil)
 		return
 	}

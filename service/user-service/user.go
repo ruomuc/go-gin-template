@@ -23,16 +23,9 @@ func (u *User) Add() error {
 		"password": password,
 		"phone":    u.Phone,
 	}
-	if err := models.AddUser(user); err != nil {
-		return err
-	}
-	return nil
+	return models.AddUser(user)
 }
 
 func (u *User) GetUserByUsername() (*models.User, error) {
-	user, err := models.GetUserByUsername(u.Username)
-	if err != nil {
-		return nil, err
-	}
-	return user, nil
+	return models.GetUserByUsername(u.Username)
 }

@@ -1,6 +1,9 @@
 package models
 
-import "github.com/jinzhu/gorm"
+import (
+	"github.com/jinzhu/gorm"
+	"github.com/pkg/errors"
+)
 
 // 结构体名称要和表名相同
 // 因为我已经全局禁用了 gorm 的复数表名
@@ -16,12 +19,9 @@ func ExistUserByUsername(username string) (bool, error) {
 	var user User
 	err := db.Select("id").Where("username = ? AND is_deleted = 0", username).First(&user).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
-		return false, err
+		return false, errors.Wrap(err, "ExistUserByUsername->db.Select error")
 	}
-	if user.ID > 0 {
-		return true, nil
-	}
-	return false, nil
+	return user.ID > 0, nil
 }
 
 func AddUser(data map[string]interface{}) error {
@@ -30,17 +30,15 @@ func AddUser(data map[string]interface{}) error {
 		Password: data["password"].(string),
 		Phone:    data["phone"].(int),
 	}
-	if err := db.Create(&user).Error; err != nil {
-		return err
-	}
-	return nil
+	err := db.Create(&user).Error
+	return errors.Wrap(err, "AddUser->db.Create error")
 }
 
 func GetUserByUsername(username string) (*User, error) {
 	var user User
 	err := db.Where("username = ? and is_deleted = 0", username).First(&user).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
-		return nil, err
+		return nil, errors.Wrap(err, "GetUserByUsername error")
 	}
 	return &user, nil
 }

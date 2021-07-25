@@ -2,6 +2,7 @@ package util
 
 import (
 	"github.com/dgrijalva/jwt-go"
+	"github.com/pkg/errors"
 	"ticket-crawler/pkg/setting"
 	"time"
 )
@@ -20,7 +21,7 @@ func GenerateToken(id int, username string, phone int) (string, error) {
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	token, err := tokenClaims.SignedString([]byte(setting.AppSetting.JwtSecret))
-	return token, err
+	return token, errors.Wrap(err, "tokenClaims.SignedString error")
 }
 
 func ParseToken(token string) (*customClaims, error) {

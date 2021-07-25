@@ -1,14 +1,14 @@
 package util
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"github.com/pkg/errors"
+	"golang.org/x/crypto/bcrypt"
+)
 
 // 加密密码
 func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
-	if err != nil {
-		return "", err
-	}
-	return string(bytes), nil
+	return string(bytes), errors.Wrap(err, "bcrypt.GenerateFromPassword error")
 }
 
 // 比较密码和密码的hash值

@@ -19,7 +19,7 @@ func TestToken(c *gin.Context) {
 	)
 
 	if data, ok = c.Get("extras"); ok {
-		logging.Info(fmt.Sprintf("%+v", data))
+		logging.Logger.Info(fmt.Sprintf("%+v", data))
 	}
 	appG.Response(http.StatusOK, e.SUCCESS, data)
 }
