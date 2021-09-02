@@ -1,9 +1,10 @@
 package app
 
 import (
+	"go-gin-template/pkg/logging"
+	"go-gin-template/pkg/validate"
+
 	"github.com/go-playground/validator/v10"
-	"ticket-crawler/pkg/logging"
-	"ticket-crawler/pkg/validate"
 )
 
 func MarkErrors(errs validator.ValidationErrors) string {

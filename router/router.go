@@ -1,9 +1,9 @@
 package router
 
 import (
-	"ticket-crawler/middleware"
-	"ticket-crawler/router/api"
-	v1 "ticket-crawler/router/api/v1"
+	"go-gin-template/middleware"
+	"go-gin-template/router/api"
+	v1 "go-gin-template/router/api/v1"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"

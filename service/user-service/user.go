@@ -1,8 +1,8 @@
 package user_service
 
 import (
-	"ticket-crawler/models"
-	"ticket-crawler/pkg/util"
+	"go-gin-template/models"
+	"go-gin-template/pkg/util"
 )
 
 type User struct {

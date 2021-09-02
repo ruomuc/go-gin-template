@@ -1,11 +1,12 @@
 package middleware
 
 import (
+	"go-gin-template/pkg/e"
+	"go-gin-template/pkg/util"
+	"net/http"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"net/http"
-	"ticket-crawler/pkg/e"
-	"ticket-crawler/pkg/util"
 )
 
 func JWT() gin.HandlerFunc {

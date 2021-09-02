@@ -1,14 +1,14 @@
 package api
 
 import (
+	_ "go-gin-template/docs"
+	"go-gin-template/pkg/app"
+	"go-gin-template/pkg/e"
+	"go-gin-template/pkg/logging"
+	"go-gin-template/pkg/util"
+	"go-gin-template/pkg/validate"
+	userService "go-gin-template/service/user-service"
 	"net/http"
-	_ "ticket-crawler/docs"
-	"ticket-crawler/pkg/app"
-	"ticket-crawler/pkg/e"
-	"ticket-crawler/pkg/logging"
-	"ticket-crawler/pkg/util"
-	"ticket-crawler/pkg/validate"
-	userService "ticket-crawler/service/user-service"
 
 	"github.com/gin-gonic/gin"
 )

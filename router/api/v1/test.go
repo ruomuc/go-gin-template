@@ -2,10 +2,10 @@ package v1
 
 import (
 	"fmt"
+	"go-gin-template/pkg/app"
+	"go-gin-template/pkg/e"
+	"go-gin-template/pkg/logging"
 	"net/http"
-	"ticket-crawler/pkg/app"
-	"ticket-crawler/pkg/e"
-	"ticket-crawler/pkg/logging"
 
 	"github.com/gin-gonic/gin"
 )

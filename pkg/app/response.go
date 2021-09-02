@@ -1,8 +1,9 @@
 package app
 
 import (
+	"go-gin-template/pkg/e"
+
 	"github.com/gin-gonic/gin"
-	"ticket-crawler/pkg/e"
 )
 
 type Gin struct {

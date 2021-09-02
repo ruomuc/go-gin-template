@@ -2,11 +2,12 @@ package models
 
 import (
 	"fmt"
+	"go-gin-template/pkg/setting"
+	"log"
+	"time"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"log"
-	"ticket-crawler/pkg/setting"
-	"time"
 )
 
 var db *gorm.DB

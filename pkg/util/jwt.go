@@ -1,10 +1,11 @@
 package util
 
 import (
+	"go-gin-template/pkg/setting"
+	"time"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/pkg/errors"
-	"ticket-crawler/pkg/setting"
-	"time"
 )
 
 type customClaims struct {
@@ -17,7 +18,7 @@ type customClaims struct {
 func GenerateToken(id int, username string, phone int) (string, error) {
 	expireTime := time.Now().Add(time.Hour * time.Duration(setting.AppSetting.JwtExpireTime))
 
-	claims := &customClaims{id, username, phone, jwt.StandardClaims{ExpiresAt: expireTime.Unix(), Issuer: "ticket-crawler"}}
+	claims := &customClaims{id, username, phone, jwt.StandardClaims{ExpiresAt: expireTime.Unix(), Issuer: "go-gin-template"}}
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	token, err := tokenClaims.SignedString([]byte(setting.AppSetting.JwtSecret))

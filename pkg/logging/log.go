@@ -2,13 +2,14 @@ package logging
 
 import (
 	"fmt"
-	"github.com/sirupsen/logrus"
+	"go-gin-template/pkg/file"
+	"go-gin-template/pkg/setting"
 	"io"
 	"log"
 	"os"
-	"ticket-crawler/pkg/file"
-	"ticket-crawler/pkg/setting"
 	"time"
+
+	"github.com/sirupsen/logrus"
 )
 
 type Level uint32

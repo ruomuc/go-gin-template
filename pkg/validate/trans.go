@@ -1,9 +1,9 @@
 package validate
 
 import (
+	"go-gin-template/pkg/setting"
 	"reflect"
 	"strings"
-	"ticket-crawler/pkg/setting"
 
 	en2 "github.com/go-playground/locales/en"
 	zh2 "github.com/go-playground/locales/zh"

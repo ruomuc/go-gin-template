@@ -1,8 +1,9 @@
 package validate
 
 import (
+	"go-gin-template/models"
+
 	"github.com/go-playground/validator/v10"
-	"ticket-crawler/models"
 )
 
 func SignUpParamUsernameValidation(fl validator.FieldLevel) bool {

@@ -2,16 +2,17 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
+	"go-gin-template/models"
+	"go-gin-template/pkg/logging"
+	"go-gin-template/pkg/setting"
+	"go-gin-template/pkg/validate"
+	"go-gin-template/router"
 	"net/http"
-	"ticket-crawler/models"
-	"ticket-crawler/pkg/logging"
-	"ticket-crawler/pkg/setting"
-	"ticket-crawler/pkg/validate"
-	"ticket-crawler/router"
+
+	"github.com/gin-gonic/gin"
 )
 
-// @title ticket-crawler API
+// @title go-gin-template API
 // @version  1.0
 // @contact.name ruomu
 // @contact.url blog.seeln.com
